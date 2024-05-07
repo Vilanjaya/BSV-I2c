@@ -1,0 +1,91 @@
+ export PATH=/opt/tools/bsc/bin:$PATH^C
+
+
+bsc [flags] file.bsv                     to partially compile a Bluespec file
+  bsc [flags] -verilog -g mod file.bsv     to compile a module to Verilog
+  bsc [flags] -verilog -g mod -u file.bsv  to recursively compile modules to Verilog
+  bsc [flags] -verilog -e topmodule        to link Verilog into a simulation model
+  bsc [flags] -sim -g mod file.bsv         to compile to a Bluesim object
+  bsc [flags] -sim -g mod -u file.bsv      to recursively compile to Bluesim objects
+  bsc [flags] -sim -e topmodule            to link objects into a Bluesim binary
+
+
+bsc file.bsv                   
+  bsc -verilog -g mod file.bsv    
+  bsc -verilog -g mod -u file.bsv 
+  bsc -verilog -e topmodule        
+  bsc -sim -g mod file.bsv         
+  bsc -sim -g mod -u file.bsv      
+  bsc -sim -e topmodule           
+
+
+./mkTop_b_sim  -V
+
+./mkTop_v_sim  +bscvc
+
+ gtkwave  dump.vcd
+ 
+ examples a
+
+ bsv 
+
+bsc -sim -g mkTestbench Testbench.bsv
+
+bsc -sim -e mkTestbench -o ./mkTestbench_bsim
+
+./mkTestbench_bsim
+
+verilog 
+
+
+bsc -verilog -g mkTestbench Testbench.bsv
+
+bsc -verilog -e mkTestbench -o mkTestbench_vsim -vsim iverilog mkTestbench.v
+
+./mkTestbench_vsim
+
+2b
+
+bsc -sim -g mkDeepThought DeepThought.bsv
+bsc -sim -g mkTestbench Testbench.bsv
+
+bsc -sim -e mkTestbench -o ./mkTestbench_bsim
+./mkTestbench_bsim
+
+
+verilog 
+
+bsc -verilog -g mkDeepThought DeepThought.bsv
+bsc -sim -g mkTestbench Testbench.bsv
+
+
+bsc -verilog -e mkTestbench -o mkTestbench_vsim -vsim iverilog mkTestbench.v
+./mkTestbench_vsim
+
+2c
+./mkTestbench_bsim -V
+gtkwave dump.vcd
+
+
+ bsc -sim -g testFSM Stmt.bsv
+ bsc -sim -e testFSM -o ./testFSM_bsim
+ ./testFSM_bsim
+
+
+bsc -sim -g testFSM Stmt.bsv
+bsc -sim -g testFSM Master.bsv
+-------------------------------
+bsc -sim -g testFSM Master.bsv
+
+bsc -sim -e testFSM -o ./mktestFSM_bsim
+
+./mktestFSM_bsim
+./mkTestbench_bsim -V
+------------------------------
+bsc -sim -g mkFifoDemo fifo.bsv
+
+-----------------
+bsc -sim -g mkDut fifo.bsv
+bsc -sim -e mkDut -o ./mkDut_bsim
+./mkDut_bsim
+bsc -verilog -g mkDut fifo.bsv
